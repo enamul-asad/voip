@@ -1,6 +1,19 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
+
+class Company(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField(unique=True)
+    credit_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+
 class User(AbstractUser):
     ROLE_CHOICES = (
         ('client', 'Client'),
@@ -8,11 +21,12 @@ class User(AbstractUser):
         ('super_admin', 'Super Admin'),
     )
 
-    role = models.CharField(
-        max_length=20,
-        choices=ROLE_CHOICES,
-        default='client'
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='client')
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
     )
-
     def __str__(self):
         return f"{self.username} ({self.role})"
