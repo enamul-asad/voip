@@ -16,9 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from accounts.views import SIPUserViewSet, whoami   # ✅ import whoami
+
+router = DefaultRouter()
+router.register(r"sip-users", SIPUserViewSet)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/auth/', include('accounts.urls')),
+    path("admin/", admin.site.urls),
+    path("api/auth/", include("accounts.urls")),
+    path("api/whoami/", whoami),        # ✅ ADD THIS LINE
+    path("api/", include(router.urls)),
 ]
 
