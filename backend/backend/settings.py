@@ -39,11 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'rest_framework_simplejwt.token_blacklist',
     'rest_framework',
     'corsheaders',
 
     'accounts',  
+    'stats',
+    'billing',
+    'sip', 
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
@@ -142,7 +145,12 @@ from datetime import timedelta
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+     "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+        "accounts.permissions.IsCompanyActive",
+    ]
+
 }
 
 SIMPLE_JWT = {
